@@ -3,6 +3,7 @@
 These tests deliberately cover only ordinary examples. They show how pytest works,
 but they are not a sufficient test suite for the specification in SPECIFICATION.md.
 """
+import pytest
 
 from weather import (
     average_temperature,
@@ -50,3 +51,57 @@ def test_hottest_measurement_with_unique_maximum():
     ]
 
     assert hottest_measurement(measurements) == ("Düsseldorf", 720, 25.0)
+
+
+def test_parse_time_limit():
+    assert parse_time("23:00") == 1380
+
+
+def test_parse_time_limit_round():
+    assert parse_time("23:20") == 1400
+
+
+def test_parse_time_incorrect_format():
+    with pytest.raises(ValueError):
+        parse_time("14_20")
+
+
+def test_parse_time_incorrect_format_0():
+    assert parse_time("04:20") == 260
+    assert parse_time("4:20") == 260
+    assert parse_time("4:2") == 260
+
+
+def test_parse_time_non_numeric_input():
+    with pytest.raises(ValueError):
+        parse_time("14:2O")
+
+
+def test_parse_measurement_non_string_input():
+    with pytest.raises(ValueError):
+        parse_measurement(["köln", "14:22", "21.7"])
+
+
+def test_parse_measurement_more_semicolon_input():
+    with pytest.raises(ValueError):
+        parse_measurement("köln;14:22;21.7;90")
+
+
+def test_parse_measurement_less_semicolon_input():
+    with pytest.raises(ValueError):
+        parse_measurement("köln;14:22")
+
+
+def test_parse_measurement_wrong_order_input():
+    with pytest.raises(ValueError):
+        parse_measurement("14:22;Köln;21.7")
+
+
+def test_parse_measurement_invalid_city():
+    with pytest.raises(ValueError):
+        parse_measurement("öln;14:22;21.7")
+
+
+def test_parse_measurement_remove_empty_spaces_and_check_floats():
+    assert parse_measurement("  Köln;14:22;21.7  ") == ("Köln", 862, 21.7)
+
