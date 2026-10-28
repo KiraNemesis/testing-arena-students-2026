@@ -112,3 +112,11 @@ def test_parse_measurement_plausibel_temp():
 
 def test_filter_by_temp_boundary():
     assert filter_by_temperature([("Köln","14:22",20), ("Köln","14:22",100), ("Köln","14:22",30)], 20, 30) == [("Köln", "14:22", 20), ("Köln", "14:22", 30)]
+
+def test_filter_by_temp_duplicates():
+    assert filter_by_temperature([("Köln", "14:22", 20), ("Köln", "14:22", 20)], 20, 30) == [
+        ("Köln", "14:22", 20), ("Köln", "14:22", 20)]
+
+def test_filter_by_temp_lower_upper_error():
+    with pytest.raises(ValueError):
+        filter_by_temperature([("Köln", "14:22", 20), ("Köln", "14:22", 20)], 30, 20)
