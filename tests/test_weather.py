@@ -109,5 +109,6 @@ def test_parse_measurement_temp_is_not_a_float():
 def test_parse_measurement_plausibel_temp():
     assert parse_measurement("Köln;14:22;100") == ("Köln", 862, 100)
 
+
 def test_filter_by_temp_boundary():
-    assert filter_by_temperature([20, 100, 30], 20, 30) == (20, 30)
+    assert filter_by_temperature([("Köln","14:22",20), ("Köln","14:22",100), ("Köln","14:22",30)], 20, 30) == [("Köln", "14:22", 20), ("Köln", "14:22", 30)]
