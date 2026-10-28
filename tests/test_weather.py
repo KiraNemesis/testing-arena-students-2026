@@ -98,5 +98,16 @@ def test_parse_measurement_wrong_order_input():
 
 
 def test_parse_measurement_remove_empty_spaces_and_check_floats():
-    assert parse_measurement("  Köln;14:22;21.7  ") == ("Köln", 862, 21.7)
+    assert parse_measurement("  Köln  ;14:22;21.7  ") == ("Köln", 862, 21.7)
 
+
+def test_parse_measurement_temp_is_not_a_float():
+    with pytest.raises(ValueError):
+        parse_measurement("Köln;14:22;21,7")
+
+
+def test_parse_measurement_plausibel_temp():
+    assert parse_measurement("Köln;14:22;100") == ("Köln", 862, 100)
+
+def test_filter_by_temp_boundary():
+    assert filter_by_temperature([20, 100, 30], 20, 30) == (20, 30)
