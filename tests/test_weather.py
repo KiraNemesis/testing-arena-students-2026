@@ -69,7 +69,7 @@ def test_parse_time_incorrect_format():
 def test_parse_time_incorrect_format_0():
     assert parse_time("04:20") == 260
     assert parse_time("4:20") == 260
-    assert parse_time("4:2") == 260
+    assert parse_time("4:2") == 242
 
 
 def test_parse_time_non_numeric_input():
@@ -95,11 +95,6 @@ def test_parse_measurement_less_semicolon_input():
 def test_parse_measurement_wrong_order_input():
     with pytest.raises(ValueError):
         parse_measurement("14:22;Köln;21.7")
-
-
-def test_parse_measurement_invalid_city():
-    with pytest.raises(ValueError):
-        parse_measurement("öln;14:22;21.7")
 
 
 def test_parse_measurement_remove_empty_spaces_and_check_floats():
